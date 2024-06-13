@@ -20,3 +20,18 @@ Jaeger должен разворачиваться отдельными комп
 Настроить Logstash для приема логов из приложения.
 
 Подготовить тестовый пример формирующий лог и трассировку.
+
+
+# Dependencies
+
+Don't forget to install the dependencies by running the following command from the app's root directory:
+```sh
+pip install -r requirements.txt
+```
+
+# Testing
+
+To test this app, run the following command from the app's root directory:
+```sh
+python -m unittest discover -s tests
+```
