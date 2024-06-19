@@ -11,7 +11,10 @@ BAD_LEVELS = ('CRYTICAL', 'bug')
 class TestPyTraceLog(unittest.TestCase):
 
     def test_good_args_for_initroot(self):
-        """Проверяем что все ок при 'хороших' аргументах."""
+        """
+        Проверяем что все ок при 'хороших' аргументах.
+        Так как None под капотом проверяется как пустое значение - использую его для проверки "не заданного" уровня.
+        """
         for level in GOOD_LEVELS:
             with self.subTest():
                 PyTraceLog.init_root_logger(level)

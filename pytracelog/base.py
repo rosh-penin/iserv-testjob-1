@@ -36,7 +36,7 @@ from opentelemetry.sdk.trace import (
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
-from pytracelog.logging.handlers import (
+from pytracelog.logging_modules.handlers import (
     StdoutHandler,
     StderrHandler,
     TracerHandler,

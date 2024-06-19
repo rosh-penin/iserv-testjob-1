@@ -40,6 +40,10 @@ class StdoutHandler(StreamHandler):
         super().__init__(stream=stdout if stream is None else stream)
         self.addFilter(self.error_record_filter)
 
+    def emit(self, record: LogRecord) -> None:
+        print("I AM EMITTAR!111")
+        return super().emit(record)
+
     @staticmethod
     def error_record_filter(record: LogRecord) -> bool:
         """

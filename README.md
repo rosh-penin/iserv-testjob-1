@@ -21,17 +21,19 @@ Jaeger должен разворачиваться отдельными комп
 
 Подготовить тестовый пример формирующий лог и трассировку.
 
+# Резюме проделанной работы
+Написаны базовые юниттесты. Часть нормально написать не удалось, докстринги приложены.
+Собран docker-compose стек, где настроен elk+приложение питона. Приложение шлет моковые данные каждую минуту.
+Для отправки тестовых данных используется приготовленный AsynchronousLogstashHandler.
+На jaeger стек уже не хватает сил и времени. Так же как и на доделку юниттестов для проверки работы метода init_logstash_logger.
 
-# Dependencies
-
-Don't forget to install the dependencies by running the following command from the app's root directory:
+# Локальные тесты
+Первым делом - установить зависимости:
 ```sh
+cd {path_to_app}
 pip install -r requirements.txt
 ```
-
-# Testing
-
-To test this app, run the following command from the app's root directory:
+Сами тесты:
 ```sh
 python -m unittest discover -s tests
 ```
