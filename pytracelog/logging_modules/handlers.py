@@ -33,16 +33,12 @@ class StdoutHandler(StreamHandler):
     """
     Вывод записей журнала с уровнем < ERROR в stdout
     """
-    def __init__(self, stream=None):
+    def __init__(self):
         """
         Переопределение конструктора: потока вывода по-умолчанию - stdout, установка фильтра записей
         """
-        super().__init__(stream=stdout if stream is None else stream)
+        super().__init__(stream=stdout)
         self.addFilter(self.error_record_filter)
-
-    def emit(self, record: LogRecord) -> None:
-        print("I AM EMITTAR!111")
-        return super().emit(record)
 
     @staticmethod
     def error_record_filter(record: LogRecord) -> bool:
@@ -58,11 +54,11 @@ class StderrHandler(StreamHandler):
     """
     Вывод записей журнала с уровнем >= ERROR в stderr
     """
-    def __init__(self, stream=None):
+    def __init__(self):
         """
         Переопределение конструктора: установка фильтра записей
         """
-        super().__init__(stream=stderr if stream is None else stream)
+        super().__init__(stream=stderr)
         self.addFilter(self.error_record_filter)
 
     @staticmethod

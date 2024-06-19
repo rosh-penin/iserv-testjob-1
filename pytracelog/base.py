@@ -16,7 +16,6 @@ from logging import (
     WARNING,
     basicConfig,
     Handler,
-    _checkLevel,
     root
 )
 
@@ -51,10 +50,10 @@ __all__ = (
 )
 
 
-LOGSTASH_HOST = 'LOGSTASH_HOST'
-LOGSTASH_PORT = 'LOGSTASH_PORT'
+LOGSTASH_HOST: str = environ.get('LOGSTASH_HOST', 'logstash')
+LOGSTASH_PORT: int = int(environ.get('LOGSTASH_PORT', 5959))
 
-OTEL_EXPORTER_JAEGER_AGENT_HOST = 'OTEL_EXPORTER_JAEGER_AGENT_HOST'
+OTEL_EXPORTER_JAEGER_AGENT_HOST: str = environ.get('OTEL_EXPORTER_JAEGER_AGENT_HOST', 'OTEL_EXPORTER_JAEGER_AGENT_HOST')
 
 
 class PyTraceLog:
@@ -68,15 +67,14 @@ class PyTraceLog:
 
     """
     _old_factory: Optional[Callable] = None
-    _handlers: Optional[List[Handler]] = list()
+    _handlers: List[Optional[Handler]] = list()
 
     @staticmethod
     def init_root_logger(
             level: Union[str, int] = WARNING,
     ) -> None:
         """
-        Инициализация логирования: инициализирует root логгер
-        LOGSTASH_HOST.
+        Инициализация логирования: инициализирует root логгер c хендлерами, которые выводят логи в stdout и stderr.
 
         :param level: Уровень логирования
         """
@@ -85,7 +83,7 @@ class PyTraceLog:
             return
 
         if isinstance(level, str):
-            level = _checkLevel(level.upper())
+            level = level.upper()
 
         # Добавление обработчика для вывода логов в stdout
         stdout_handler = StdoutHandler()
@@ -97,7 +95,7 @@ class PyTraceLog:
 
         basicConfig(
             level=level,
-            handlers=PyTraceLog._handlers
+            handlers=[hdlr for hdlr in PyTraceLog._handlers]
         )
 
     @staticmethod
@@ -138,10 +136,8 @@ class PyTraceLog:
             if isinstance(handler, AsynchronousLogstashHandler):
                 return
 
-        logstash_host = environ.get(LOGSTASH_HOST)
-
         # Инициализируем обработчик, только если задан хост Logstash
-        if logstash_host:
+        if LOGSTASH_HOST:
             logstash_formatter = LogstashFormatter(
                 message_type=message_type,
                 extra_prefix=None,
@@ -150,8 +146,8 @@ class PyTraceLog:
                 }
             )
             logstash_handler = AsynchronousLogstashHandler(
-                host=logstash_host,
-                port=int(environ.get(LOGSTASH_PORT, 5959)),
+                host=LOGSTASH_HOST,
+                port=LOGSTASH_PORT,
                 database_path=None
             )
             logstash_handler.setFormatter(fmt=logstash_formatter)
